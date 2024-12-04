@@ -1,0 +1,65 @@
+version: '3.8'
+
+volumes:
+  mysql-data:
+
+services:
+  app:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    
+    container_name: go-dev-container
+    env_file:
+        # Ensure that the variables in .env match the same variables in devcontainer.json
+        - .env
+
+    dns:
+      - 8.8.8.8      # Google DNS
+      - 8.8.4.4      # Google DNS
+
+    volumes:
+      - ../..:/workspaces:cached
+      
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+
+    # Runs app on the same network as the database container, allows "forwardPorts" in devcontainer.json function.
+    # network_mode: service:db
+    networks:
+      - app-network
+
+    # Use "forwardPorts" in **devcontainer.json** to forward an app port locally. 
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
+
+  db:
+    image: mysql:8.0
+    restart: unless-stopped
+    volumes:
+      - ./data:/var/lib/mysql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+   
+    environment:
+      MYSQL_DATABASE: dev_go
+    env_file:
+      # Ensure that the variables in .env match the same variables in devcontainer.json
+      - .env
+    networks:
+      - app-network
+    dns:
+      - 8.8.8.8      # Google DNS
+      - 8.8.4.4      # Google DNS
+  
+  redis:
+    image: redis:latest
+    container_name: go_redis
+    ports:
+      - "6379:6379"
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+    # Add "forwardPorts": ["5432"] to **devcontainer.json** to forward PostgreSQL locally.
+    # (Adding the "ports" property to this file will not forward from a Codespace.)
