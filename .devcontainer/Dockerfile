@@ -2,6 +2,10 @@ FROM mcr.microsoft.com/devcontainers/go:1-1.23-bookworm
 
 ENV GOPROXY=https://goproxy.cn,direct
 
+RUN go install github.com/air-verse/air@latest
+
+CMD ['air', '-c', '.air.toml']
+
 # [Optional] Uncomment this section to install additional OS packages.
 # RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 #     && apt-get -y install --no-install-recommends <your-package-list-here>
