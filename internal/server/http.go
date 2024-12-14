@@ -4,10 +4,12 @@ import (
 	"context"
 
 	"github.com/gin-gonic/gin"
-	"northal.com/internal/model"
+	"northal.com/config"
+	"northal.com/internal/biz"
 )
 
 func InitHttp() *gin.Engine {
+	config.InitViper()
 	engine := gin.Default()
 	ctx := context.Background()
 
@@ -18,11 +20,11 @@ func InitHttp() *gin.Engine {
 		panic(err)
 	}
 
-	db.AutoMigrate(&model.Users{})
+	db.AutoMigrate(&biz.Users{}, &biz.Role{}, &biz.Permission{})
 
-	var user model.Users
+	var user biz.Users
 	db.Find(&user)
-	val, err := redis.Get(ctx, "key").Result()
+	val, _ := redis.Get(ctx, "key").Result()
 
 	api := engine.Group("/api")
 	api.GET("/", func(c *gin.Context) {
@@ -31,6 +33,8 @@ func InitHttp() *gin.Engine {
 			"data":        user,
 			"redis_value": val,
 			"hello":       "123",
+			"config":      config.GetAppConfig(),
+			"database":    config.GetDatabaseConfig(),
 		})
 	})
 
