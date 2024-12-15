@@ -6,11 +6,14 @@ import (
 	"github.com/gin-gonic/gin"
 	"northal.com/config"
 	"northal.com/internal/biz"
+	"northal.com/internal/middleware"
+	"northal.com/internal/pkg/response"
 )
 
 func InitHttp() *gin.Engine {
 	config.InitViper()
 	engine := gin.Default()
+	engine.Use(middleware.ErrorHandler())
 	ctx := context.Background()
 
 	db := InitDatabase()
@@ -28,7 +31,7 @@ func InitHttp() *gin.Engine {
 
 	api := engine.Group("/api")
 	api.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
+		response.Success(c, gin.H{
 			"message":     "123",
 			"data":        user,
 			"redis_value": val,
@@ -36,6 +39,10 @@ func InitHttp() *gin.Engine {
 			"config":      config.GetAppConfig(),
 			"database":    config.GetDatabaseConfig(),
 		})
+	})
+
+	api.GET("/error", func(c *gin.Context) {
+		panic("error")
 	})
 
 	engine.Run(":8080")
