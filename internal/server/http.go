@@ -4,10 +4,13 @@ import (
 	"context"
 
 	"github.com/gin-gonic/gin"
+	"northal.com/api"
 	"northal.com/config"
 	"northal.com/internal/biz"
+	"northal.com/internal/data"
 	"northal.com/internal/middleware"
 	"northal.com/internal/pkg/response"
+	"northal.com/internal/services"
 )
 
 func InitHttp() *gin.Engine {
@@ -18,6 +21,12 @@ func InitHttp() *gin.Engine {
 
 	db := InitDatabase()
 	redis := InitRedis()
+
+	publicApi := engine.Group("/api")
+	authApi := engine.Group("/api")
+
+	api.NewUserApi(services.NewUserService(data.NewUserRepo(db))).SetupPublicRoutes(publicApi).SetupAuthRoutes(authApi)
+
 	err := redis.Set(ctx, "key", "123", 0).Err()
 	if err != nil {
 		panic(err)
