@@ -1,7 +1,7 @@
 [app]
 name = "gin-web"
 mode = "debug"
-port = "8080"
+port = "3333"
 
 [database]
 host = "localhost"

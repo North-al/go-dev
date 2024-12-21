@@ -1,0 +1,105 @@
+basePath: /
+definitions:
+  biz.Permission:
+    properties:
+      code:
+        type: string
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      updated_at:
+        type: string
+    type: object
+  biz.Role:
+    properties:
+      created_at:
+        type: string
+      description:
+        type: string
+      id:
+        type: integer
+      name:
+        type: string
+      permissions:
+        items:
+          $ref: '#/definitions/biz.Permission'
+        type: array
+      updated_at:
+        type: string
+    type: object
+  biz.Users:
+    properties:
+      created_at:
+        type: string
+      email:
+        type: string
+      id:
+        type: integer
+      phone:
+        type: string
+      roles:
+        items:
+          $ref: '#/definitions/biz.Role'
+        type: array
+      status:
+        type: boolean
+      updated_at:
+        type: string
+      username:
+        type: string
+    type: object
+  response.Response:
+    properties:
+      code:
+        description: 状态码
+        type: integer
+      data:
+        description: 数据内容
+      message:
+        description: 提示信息
+        type: string
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: 1227379879@qq.com
+    name: North
+  description: 权限管理系统swagger api介绍
+  termsOfService: http://swagger.io/terms/
+  title: 权限管理系统
+  version: "1.0"
+paths:
+  /user/login:
+    post:
+      consumes:
+      - application/json
+      description: 登录
+      parameters:
+      - description: 用户信息
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/biz.Users'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 登录
+      tags:
+      - 用户
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

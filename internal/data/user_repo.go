@@ -15,6 +15,7 @@ func NewUserRepo(db *gorm.DB) *UserRepo {
 	return &UserRepo{db: db}
 }
 
+// 根据id查询用户
 func (r *UserRepo) GetUserByID(id int) (*biz.Users, error) {
 
 	if id == 0 {
@@ -25,6 +26,20 @@ func (r *UserRepo) GetUserByID(id int) (*biz.Users, error) {
 	if err := r.db.First(&user, id).Error; err != nil {
 		return nil, err
 	}
+	return &user, nil
+}
+
+// 根据用户名查询用户
+func (r *UserRepo) GetUserByUsername(username string) (*biz.Users, error) {
+	if username == "" {
+		return nil, errors.New("username is required")
+	}
+
+	var user biz.Users
+	if err := r.db.Where("username = ?", username).First(&user).Error; err != nil {
+		return nil, err
+	}
+
 	return &user, nil
 }
 
