@@ -38,9 +38,6 @@ func (u *UserApi) SetupAuthRoutes(r *gin.RouterGroup) *UserApi {
 
 func (u *UserApi) GetUser(c *gin.Context) {
 
-	response.Success(c, gin.H{
-		"message": "ok",
-	})
 }
 
 // @Summary 登录
@@ -60,7 +57,7 @@ func (u *UserApi) Login(c *gin.Context) {
 
 	success, err := u.service.Login(params)
 	if err != nil {
-		response.Error(c, http.StatusBadRequest, err.Error())
+		response.Error(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 

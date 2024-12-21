@@ -37,7 +37,7 @@ func (r *UserRepo) GetUserByUsername(username string) (*biz.Users, error) {
 
 	var user biz.Users
 	if err := r.db.Where("username = ?", username).First(&user).Error; err != nil {
-		return nil, err
+		return nil, errors.New("当前用户不存在")
 	}
 
 	return &user, nil

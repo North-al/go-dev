@@ -10,8 +10,8 @@
         },
         "version": "1.0"
     },
-    "host": "localhost:8080",
-    "basePath": "/",
+    "host": "localhost:3333",
+    "basePath": "/api",
     "paths": {
         "/user/login": {
             "post": {

@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/gin-gonic/gin"
 	"northal.com/api"
 	"northal.com/config"
 	_ "northal.com/docs"
@@ -16,8 +15,8 @@ import (
 //	@contact.name	North
 //	@contact.email	1227379879@qq.com
 
-//	@host		localhost:8080
-//	@BasePath	/
+//	@host		localhost:3333
+//	@BasePath	/api
 
 //	@securityDefinitions.basic	BasicAuth
 
@@ -31,12 +30,6 @@ func main() {
 
 	// 加载所有api
 	api.NewSetupApi(router, db, redis).SetupRoutes()
-
-	router.GET("/", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
-	})
 
 	// 加载swagger
 	server.InitDocs(router)
