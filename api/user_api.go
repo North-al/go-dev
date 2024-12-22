@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"northal.com/internal/biz"
 	"northal.com/internal/pkg/response"
 	"northal.com/internal/services"
 )
@@ -25,6 +24,7 @@ func (u *UserApi) SetupPublicRoutes(r *gin.RouterGroup) *UserApi {
 	prefix := r.Group(ApiPrefix)
 	{
 		prefix.POST("/login", u.Login)
+		prefix.POST("/register", u.Register)
 	}
 	prefix.GET("/", u.GetUser)
 	return u
@@ -45,11 +45,11 @@ func (u *UserApi) GetUser(c *gin.Context) {
 // @Tags 用户
 // @Accept json
 // @Produce json
-// @Param user body biz.Users true "用户信息"
+// @Param user body services.LoginParams true "用户信息"
 // @Success 200 {object} response.Response
 // @Router /user/login [post]
 func (u *UserApi) Login(c *gin.Context) {
-	var params biz.Users
+	var params services.LoginParams
 	if err := c.ShouldBindJSON(&params); err != nil {
 		response.Error(c, http.StatusBadRequest, err.Error())
 		return
@@ -62,4 +62,29 @@ func (u *UserApi) Login(c *gin.Context) {
 	}
 
 	response.Success(c, success)
+}
+
+// @Summary 注册
+// @Description 注册
+// @Tags 用户
+// @Accept json
+// @Produce json
+// @Param user body services.RegisterParams true "用户信息"
+// @Success 200 {object} response.Response
+// @Router /user/register [post]
+func (u *UserApi) Register(c *gin.Context) {
+	var body services.RegisterParams
+
+	if err := c.ShouldBindJSON(&body); err != nil {
+		response.Error(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	result, err := u.service.Register(body)
+	if err != nil {
+		response.Error(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	response.Success(c, result)
 }

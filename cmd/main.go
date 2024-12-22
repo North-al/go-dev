@@ -4,6 +4,7 @@ import (
 	"northal.com/api"
 	"northal.com/config"
 	_ "northal.com/docs"
+	"northal.com/internal/biz"
 	"northal.com/internal/server"
 )
 
@@ -27,6 +28,8 @@ func main() {
 	router := server.InitHttp()
 	db := server.InitDatabase()
 	redis := server.InitRedis()
+
+	db.AutoMigrate(&biz.Users{}, &biz.Role{}, &biz.Permission{})
 
 	// 加载所有api
 	api.NewSetupApi(router, db, redis).SetupRoutes()

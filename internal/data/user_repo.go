@@ -29,6 +29,20 @@ func (r *UserRepo) GetUserByID(id int) (*biz.Users, error) {
 	return &user, nil
 }
 
+// 根据账号查询用户
+func (r *UserRepo) GetUserByAccount(account string) (int64, error) {
+	if account == "" {
+		return 0, errors.New("账号是必填项")
+	}
+
+	var count int64 = 0
+	if err := r.db.Model(&biz.Users{}).Where("email = ? or phone = ? or username = ?", account, account, account).Count(&count).Error; err != nil {
+		return count, err
+	}
+
+	return count, nil
+}
+
 // 根据用户名查询用户
 func (r *UserRepo) GetUserByUsername(username string) (*biz.Users, error) {
 	if username == "" {

@@ -6,11 +6,9 @@ import (
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
-	"northal.com/internal/biz"
 )
 
 func InitDatabase() *gorm.DB {
-
 	var db *gorm.DB
 	var err error
 
@@ -25,6 +23,5 @@ func InitDatabase() *gorm.DB {
 
 	log.Fatalf("failed to connect database after 5 attempts: %v", err)
 
-	db.AutoMigrate(&biz.Users{}, &biz.Role{}, &biz.Permission{})
-	return nil
+	return db
 }
