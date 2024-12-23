@@ -97,5 +97,11 @@ func (u *UserApi) Register(c *gin.Context) {
 // @Router /user/info [get]
 func (u *UserApi) GetUserInfo(c *gin.Context) {
 	userID := c.GetInt("user_id")
-	response.Success(c, userID)
+	user, err := u.service.GetUserInfo(userID)
+	if err != nil {
+		response.Error(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	response.Success(c, user)
 }

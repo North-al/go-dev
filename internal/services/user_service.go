@@ -3,6 +3,7 @@ package services
 import (
 	"errors"
 
+	"gorm.io/gorm"
 	"northal.com/internal/biz"
 	"northal.com/internal/data"
 	"northal.com/internal/pkg/jwt"
@@ -33,7 +34,7 @@ func NewUserService(repo *data.UserRepo) *UserService {
 
 func (u *UserService) Login(params LoginParams) (*LoginResponse, error) {
 	// 1. 查询用户是否存在
-	user, err := u.repo.GetUserByUsername(params.Account)
+	user, _, err := u.repo.GetUserByAccount(params.Account)
 	if err != nil {
 		return nil, err
 	}
@@ -56,9 +57,9 @@ func (u *UserService) Login(params LoginParams) (*LoginResponse, error) {
 func (u *UserService) Register(params RegisterParams) (int64, error) {
 
 	// 1. 查询用户是否存在
-	count, err := u.repo.GetUserByAccount(params.Account)
-	if err != nil {
-		return count, err
+	_, count, err := u.repo.GetUserByAccount(params.Account)
+	if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+		return 0, err
 	}
 
 	if count > 0 {
@@ -81,6 +82,11 @@ func (u *UserService) Register(params RegisterParams) (int64, error) {
 
 	// 3. 返回结果
 	return int64(user.ID), nil
+}
+
+// 获取用户信息
+func (u *UserService) GetUserInfo(id int) (*biz.Users, error) {
+	return u.repo.GetUserByID(id)
 }
 
 func getEmailIfValid(account string) string {
