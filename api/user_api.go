@@ -26,18 +26,17 @@ func (u *UserApi) SetupPublicRoutes(r *gin.RouterGroup) *UserApi {
 		prefix.POST("/login", u.Login)
 		prefix.POST("/register", u.Register)
 	}
-	prefix.GET("/", u.GetUser)
+
 	return u
 }
 
 func (u *UserApi) SetupAuthRoutes(r *gin.RouterGroup) *UserApi {
-	// prefix := r.Group(ApiPrefix)
-	// prefix.GET("/", u.GetUser)
+	prefix := r.Group(ApiPrefix)
+	{
+		prefix.GET("/info", u.GetUserInfo)
+	}
+
 	return u
-}
-
-func (u *UserApi) GetUser(c *gin.Context) {
-
 }
 
 // @Summary 登录
@@ -87,4 +86,16 @@ func (u *UserApi) Register(c *gin.Context) {
 	}
 
 	response.Success(c, result)
+}
+
+// @Summary 获取用户信息
+// @Description 获取用户信息
+// @Tags 用户
+// @Accept json
+// @Produce json
+// @Success 200 {object} response.Response
+// @Router /user/info [get]
+func (u *UserApi) GetUserInfo(c *gin.Context) {
+	userID := c.GetInt("user_id")
+	response.Success(c, userID)
 }

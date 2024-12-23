@@ -23,8 +23,13 @@ type DatabaseConfig struct {
 	Database string `json:"database"`
 }
 
+type JwtConfig struct {
+	SecretKey string `json:"secret_key"`
+}
+
 var appConfig AppConfig
 var databaseConfig DatabaseConfig
+var jwtConfig JwtConfig
 
 func InitViper() {
 	viper.SetConfigName("dev")
@@ -47,6 +52,11 @@ func InitViper() {
 	if err != nil {
 		panic(fmt.Errorf("unable to decode database config: %v", err))
 	}
+
+	err = viper.UnmarshalKey("jwt", &jwtConfig)
+	if err != nil {
+		panic(fmt.Errorf("unable to decode jwt config: %v", err))
+	}
 }
 
 // 获取应用配置
@@ -57,4 +67,9 @@ func GetAppConfig() AppConfig {
 // 获取数据库配置
 func GetDatabaseConfig() DatabaseConfig {
 	return databaseConfig
+}
+
+// 获取JWT配置
+func GetJwtConfig() JwtConfig {
+	return jwtConfig
 }

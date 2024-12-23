@@ -5,6 +5,7 @@ import (
 	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
 	"northal.com/internal/data"
+	"northal.com/internal/middleware"
 	"northal.com/internal/services"
 )
 
@@ -21,6 +22,10 @@ func NewSetupApi(router *gin.Engine, db *gorm.DB, redis *redis.Client) *SetupApi
 }
 
 func (s *SetupApi) SetupRoutes() {
-	prefix := s.router.Group(prefix)
-	NewUserApi(services.NewUserService(data.NewUserRepo(s.DB))).SetupPublicRoutes(prefix).SetupAuthRoutes(prefix)
+	public := s.router.Group(prefix)
+
+	auth := s.router.Group(prefix)
+	auth.Use(middleware.AuthHandler())
+
+	NewUserApi(services.NewUserService(data.NewUserRepo(s.DB))).SetupPublicRoutes(public).SetupAuthRoutes(auth)
 }

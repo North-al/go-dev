@@ -5,14 +5,14 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"northal.com/config"
 )
 
 type Jwt struct {
-	secretKey string
 }
 
-func NewJwt(secretKey string) *Jwt {
-	return &Jwt{secretKey: secretKey}
+func NewJwt() *Jwt {
+	return &Jwt{}
 }
 
 // 生成token
@@ -25,13 +25,13 @@ func (j *Jwt) GenerateToken(userID int) (string, error) {
 	}
 
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, claims)
-	return token.SignedString([]byte(j.secretKey))
+	return token.SignedString([]byte(config.GetJwtConfig().SecretKey))
 }
 
 // 解析token
 func (j *Jwt) ParseToken(tokenStr string) (int, error) {
 	token, err := jwt.Parse(tokenStr, func(token *jwt.Token) (interface{}, error) {
-		return []byte(j.secretKey), nil
+		return []byte(config.GetJwtConfig().SecretKey), nil
 	})
 
 	if err != nil {
@@ -43,10 +43,15 @@ func (j *Jwt) ParseToken(tokenStr string) (int, error) {
 		return 0, errors.New("invalid token")
 	}
 
-	userID, ok := claims["sub"].(int)
+	userID, ok := claims["sub"]
+
 	if !ok {
 		return 0, errors.New("invalid user ID")
 	}
 
-	return userID, nil
+	if id, ok := userID.(float64); ok {
+		return int(id), nil
+	}
+
+	return 0, errors.New("invalid user ID type")
 }

@@ -48,6 +48,21 @@ info:
   title: 权限管理系统
   version: "1.0"
 paths:
+  /user/info:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户信息
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/response.Response'
+      summary: 获取用户信息
+      tags:
+      - 用户
   /user/login:
     post:
       consumes:

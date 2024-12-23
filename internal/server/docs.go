@@ -9,5 +9,11 @@ import (
 )
 
 func InitDocs(router *gin.Engine) {
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	// 我想访问swagger.json文件
+	router.GET("/swagger/swagger.json", func(c *gin.Context) {
+		c.File("docs/swagger.json")
+	})
+
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 }

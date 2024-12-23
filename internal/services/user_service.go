@@ -44,7 +44,7 @@ func (u *UserService) Login(params LoginParams) (*LoginResponse, error) {
 	}
 
 	// 3. 生成token
-	jwtInstance := jwt.NewJwt("Northal")
+	jwtInstance := jwt.NewJwt()
 	token, err := jwtInstance.GenerateToken(int(user.ID))
 	if err != nil {
 		return nil, err
