@@ -1,7 +1,7 @@
 version: '3.8'
 
 volumes:
-  mysql-data:
+  mysql_data:
 
 services:
   app:
@@ -36,8 +36,9 @@ services:
     image: mysql:8.0
     restart: unless-stopped
     volumes:
-      - ./data:/var/lib/mysql
-      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+      - mysql_data:/var/lib/mysql
+    command:
+      --default-authentication-plugin=mysql_native_password
    
     environment:
       MYSQL_DATABASE: dev_go
