@@ -6,10 +6,12 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// Response 通用响应结构
+// @Description 接口统一返回格式
 type Response struct {
-	Code    int         `json:"code"`           // 状态码
-	Message string      `json:"message"`        // 提示信息
-	Data    interface{} `json:"data,omitempty"` // 数据内容
+	Code    int         `json:"code" example:"200"`        // 状态码 (200-成功, 500-失败)
+	Message string      `json:"message" example:"success"` // 提示信息
+	Data    interface{} `json:"data,omitempty"`            // 数据内容
 }
 
 // Success 返回成功响应

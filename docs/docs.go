@@ -21,6 +21,11 @@ const docTemplate = `{
     "paths": {
         "/user/info": {
             "get": {
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    }
+                ],
                 "description": "获取用户信息",
                 "consumes": [
                     "application/json"
@@ -29,12 +34,30 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户"
+                    "用户模块"
                 ],
                 "summary": "获取用户信息",
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/biz.Users"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -44,7 +67,7 @@ const docTemplate = `{
         },
         "/user/login": {
             "post": {
-                "description": "登录",
+                "description": "用户登录，返回token",
                 "consumes": [
                     "application/json"
                 ],
@@ -52,9 +75,9 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户"
+                    "用户模块"
                 ],
-                "summary": "登录",
+                "summary": "用户登录",
                 "parameters": [
                     {
                         "description": "用户信息",
@@ -69,6 +92,24 @@ const docTemplate = `{
                 "responses": {
                     "200": {
                         "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "string"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
@@ -86,7 +127,7 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户"
+                    "用户模块"
                 ],
                 "summary": "注册",
                 "parameters": [
@@ -104,6 +145,24 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/response.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "integer"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
                             "$ref": "#/definitions/response.Response"
                         }
                     }
@@ -112,19 +171,112 @@ const docTemplate = `{
         }
     },
     "definitions": {
-        "response.Response": {
+        "biz.Permission": {
             "type": "object",
             "properties": {
                 "code": {
-                    "description": "状态码",
+                    "type": "string"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
                     "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "biz.Role": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string"
+                },
+                "description": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "permissions": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/biz.Permission"
+                    }
+                },
+                "updated_at": {
+                    "type": "string"
+                }
+            }
+        },
+        "biz.Users": {
+            "description": "系统用户信息",
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "description": "创建时间",
+                    "type": "string"
+                },
+                "email": {
+                    "description": "邮箱",
+                    "type": "string"
+                },
+                "id": {
+                    "description": "用户id",
+                    "type": "integer"
+                },
+                "phone": {
+                    "description": "手机号",
+                    "type": "string"
+                },
+                "roles": {
+                    "description": "角色",
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/biz.Role"
+                    }
+                },
+                "status": {
+                    "description": "状态",
+                    "type": "boolean"
+                },
+                "updated_at": {
+                    "description": "更新时间",
+                    "type": "string"
+                },
+                "username": {
+                    "description": "用户名 唯一",
+                    "type": "string"
+                }
+            }
+        },
+        "response.Response": {
+            "description": "接口统一返回格式",
+            "type": "object",
+            "properties": {
+                "code": {
+                    "description": "状态码 (200-成功, 500-失败)",
+                    "type": "integer",
+                    "example": 200
                 },
                 "data": {
                     "description": "数据内容"
                 },
                 "message": {
                     "description": "提示信息",
-                    "type": "string"
+                    "type": "string",
+                    "example": "success"
                 }
             }
         },
@@ -137,11 +289,13 @@ const docTemplate = `{
             "properties": {
                 "account": {
                     "description": "账号 邮箱/手机号/用户名",
-                    "type": "string"
+                    "type": "string",
+                    "default": "zhangsan"
                 },
                 "password": {
                     "description": "密码 6-16位",
-                    "type": "string"
+                    "type": "string",
+                    "default": "123456"
                 }
             }
         },
@@ -154,23 +308,23 @@ const docTemplate = `{
             "properties": {
                 "account": {
                     "description": "账号 邮箱/手机号/用户名",
-                    "type": "string"
+                    "type": "string",
+                    "default": "zhangsan"
                 },
                 "password": {
                     "description": "密码 6-16位",
-                    "type": "string"
+                    "type": "string",
+                    "default": "123456"
                 }
             }
         }
     },
     "securityDefinitions": {
-        "BasicAuth": {
-            "type": "basic"
+        "ApiKeyAuth  API的认证方式": {
+            "type": "apiKey",
+            "name": "Authorization  后端获取认证值得方式",
+            "in": "header 发送认证的方式"
         }
-    },
-    "externalDocs": {
-        "description": "OpenAPI",
-        "url": "https://swagger.io/resources/open-api/"
     }
 }`
 
@@ -181,7 +335,7 @@ var SwaggerInfo = &swag.Spec{
 	BasePath:         "/api",
 	Schemes:          []string{},
 	Title:            "权限管理系统",
-	Description:      "权限管理系统swagger api介绍",
+	Description:      "权限管理系统api",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate,
 	LeftDelim:        "{{",

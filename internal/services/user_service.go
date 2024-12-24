@@ -17,8 +17,8 @@ type UserService struct {
 }
 
 type LoginParams struct {
-	Account  string `json:"account" binding:"required"`  // 账号 邮箱/手机号/用户名
-	Password string `json:"password" binding:"required"` // 密码 6-16位
+	Account  string `json:"account" binding:"required" default:"zhangsan"` // 账号 邮箱/手机号/用户名
+	Password string `json:"password" binding:"required" default:"123456"`  // 密码 6-16位
 }
 
 type RegisterParams struct {

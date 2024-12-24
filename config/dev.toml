@@ -11,5 +11,5 @@ password = "123456"
 database = "dev_go"
 
 [jwt]
-secret_key = "gin-web"
-token_expire = 24 # 单位小时
+secretKey = "gin-web"
+tokenExpire = 24

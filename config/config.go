@@ -24,8 +24,8 @@ type DatabaseConfig struct {
 }
 
 type JwtConfig struct {
-	SecretKey   string `json:"secret_key"`
-	TokenExpire int    `json:"token_expire"`
+	SecretKey   string `json:"secretKey"`
+	TokenExpire int    `json:"tokenExpire"`
 }
 
 var appConfig AppConfig

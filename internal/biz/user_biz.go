@@ -6,6 +6,8 @@ import (
 	"gorm.io/gorm"
 )
 
+// Users 用户模型
+// @Description 系统用户信息
 type Users struct {
 	ID        uint64     `gorm:"primaryKey;autoIncrement" json:"id"`               // 用户id
 	Username  string     `gorm:"type:varchar(50);not null;unique" json:"username"` // 用户名 唯一

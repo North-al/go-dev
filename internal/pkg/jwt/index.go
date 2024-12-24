@@ -2,6 +2,7 @@ package jwt
 
 import (
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
@@ -17,10 +18,15 @@ func NewJwt() *Jwt {
 
 // 生成token
 func (j *Jwt) GenerateToken(userID int) (string, error) {
+
+	fmt.Println(config.GetJwtConfig().TokenExpire, "config.GetJwtConfig().TokenExpire")
+	fmt.Println(config.GetJwtConfig().SecretKey, "config.GetJwtConfig().TokenSecretKey")
+	fmt.Println(time.Duration(config.GetJwtConfig().TokenExpire)*time.Hour, "time.Duration(config.GetJwtConfig().TokenExpire)*time.Hour")
+
 	claims := jwt.MapClaims{
 		"iss": "gin-web",
 		"iat": time.Now().Unix(),
-		"exp": time.Now().Add(time.Hour * time.Duration(config.GetJwtConfig().TokenExpire)).Unix(), // 过期时间24小时
+		"exp": time.Now().Add(24 * time.Hour).Unix(), // 过期时间24小时
 		"sub": userID,
 	}
 

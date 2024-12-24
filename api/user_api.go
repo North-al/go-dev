@@ -39,13 +39,14 @@ func (u *UserApi) SetupAuthRoutes(r *gin.RouterGroup) *UserApi {
 	return u
 }
 
-// @Summary 登录
-// @Description 登录
-// @Tags 用户
+// @Summary 用户登录
+// @Description 用户登录，返回token
+// @Tags 用户模块
 // @Accept json
 // @Produce json
 // @Param user body services.LoginParams true "用户信息"
-// @Success 200 {object} response.Response
+// @Success 200 {object} response.Response{data=string}  成功后返回值
+// @Failure 500 {object} response.Response  失败后返回值
 // @Router /user/login [post]
 func (u *UserApi) Login(c *gin.Context) {
 	var params services.LoginParams
@@ -65,11 +66,12 @@ func (u *UserApi) Login(c *gin.Context) {
 
 // @Summary 注册
 // @Description 注册
-// @Tags 用户
+// @Tags 用户模块
 // @Accept json
 // @Produce json
 // @Param user body services.RegisterParams true "用户信息"
-// @Success 200 {object} response.Response
+// @Success 200 {object} response.Response{data=int}  成功后返回值
+// @Failure 500 {object} response.Response  失败后返回值
 // @Router /user/register [post]
 func (u *UserApi) Register(c *gin.Context) {
 	var body services.RegisterParams
@@ -90,10 +92,12 @@ func (u *UserApi) Register(c *gin.Context) {
 
 // @Summary 获取用户信息
 // @Description 获取用户信息
-// @Tags 用户
+// @Tags 用户模块
 // @Accept json
 // @Produce json
-// @Success 200 {object} response.Response
+// @Security ApiKeyAuth
+// @Success 200 {object} response.Response{data=biz.Users}  成功后返回值
+// @Failure 500 {object} response.Response  失败后返回值
 // @Router /user/info [get]
 func (u *UserApi) GetUserInfo(c *gin.Context) {
 	userID := c.GetInt("user_id")
