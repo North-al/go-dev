@@ -13,8 +13,6 @@ func AuthHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
 
-		fmt.Println(token)
-
 		if token == "" {
 			response.Error(c, http.StatusUnauthorized, "Unauthorized")
 			c.Abort()

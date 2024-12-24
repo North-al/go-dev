@@ -20,7 +20,7 @@ func (j *Jwt) GenerateToken(userID int) (string, error) {
 	claims := jwt.MapClaims{
 		"iss": "gin-web",
 		"iat": time.Now().Unix(),
-		"exp": time.Now().Add(time.Hour * 24).Unix(), // 过期时间24小时
+		"exp": time.Now().Add(time.Hour * time.Duration(config.GetJwtConfig().TokenExpire)).Unix(), // 过期时间24小时
 		"sub": userID,
 	}
 

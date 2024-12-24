@@ -2,6 +2,7 @@ package services
 
 import (
 	"errors"
+	"fmt"
 
 	"gorm.io/gorm"
 	"northal.com/internal/biz"
@@ -51,6 +52,9 @@ func (u *UserService) Login(params LoginParams) (*LoginResponse, error) {
 		return nil, err
 	}
 
+	// 4. redis缓存token
+	u.repo.SetToken(int(user.ID), token)
+
 	return &LoginResponse{Token: token}, nil
 }
 
@@ -73,6 +77,17 @@ func (u *UserService) Register(params RegisterParams) (int64, error) {
 		Email:    getEmailIfValid(params.Account),
 		Phone:    getPhoneIfValid(params.Account),
 	}
+
+	// 判断是邮箱还是手机号、用户名
+	if getEmailIfValid(params.Account) != "" {
+		user.Email = getEmailIfValid(params.Account)
+	} else if getPhoneIfValid(params.Account) != "" {
+		user.Phone = getPhoneIfValid(params.Account)
+	} else {
+		user.Username = params.Account
+	}
+
+	fmt.Println(user)
 
 	err = u.repo.Create(&user)
 

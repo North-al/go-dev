@@ -1,18 +1,24 @@
 package data
 
 import (
+	"context"
 	"errors"
+	"fmt"
+	"time"
 
+	"github.com/redis/go-redis/v9"
 	"gorm.io/gorm"
+	"northal.com/config"
 	"northal.com/internal/biz"
 )
 
 type UserRepo struct {
-	db *gorm.DB
+	db    *gorm.DB
+	redis *redis.Client
 }
 
-func NewUserRepo(db *gorm.DB) *UserRepo {
-	return &UserRepo{db: db}
+func NewUserRepo(db *gorm.DB, redis *redis.Client) *UserRepo {
+	return &UserRepo{db: db, redis: redis}
 }
 
 func (r *UserRepo) GetUserByCondition(condition string, args ...interface{}) (*biz.Users, int64, error) {
@@ -62,4 +68,11 @@ func (r *UserRepo) Create(user *biz.Users) error {
 	}
 
 	return r.db.Create(user).Error
+}
+
+// redis缓存token
+func (r *UserRepo) SetToken(userID int, token string) error {
+	ctxBackground := context.Background()
+	expireTime := time.Duration(config.GetJwtConfig().TokenExpire) * time.Hour
+	return r.redis.Set(ctxBackground, fmt.Sprintf("user:%d:token", userID), token, expireTime).Err()
 }
