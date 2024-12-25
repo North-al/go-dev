@@ -1,7 +1,6 @@
 package middleware
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -9,7 +8,7 @@ import (
 	"northal.com/internal/pkg/response"
 )
 
-func AuthHandler() gin.HandlerFunc {
+func AuthHandler(getToken func(userID int) (string, error)) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		token := c.GetHeader("Authorization")
 
@@ -21,15 +20,21 @@ func AuthHandler() gin.HandlerFunc {
 
 		jwtInstance := jwt.NewJwt()
 
-		claims, err := jwtInstance.ParseToken(token)
-		fmt.Println(claims)
+		userId, err := jwtInstance.ParseToken(token)
 		if err != nil {
 			response.Error(c, http.StatusUnauthorized, err.Error())
 			c.Abort()
 			return
 		}
 
-		c.Set("user_id", claims)
+		userToken, err := getToken(userId)
+		if err != nil || userToken != token {
+			response.Error(c, http.StatusUnauthorized, err.Error())
+			c.Abort()
+			return
+		}
+
+		c.Set("user_id", userId)
 		c.Next()
 	}
 }

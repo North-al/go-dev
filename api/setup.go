@@ -25,7 +25,11 @@ func (s *SetupApi) SetupRoutes() {
 	public := s.router.Group(prefix)
 
 	auth := s.router.Group(prefix)
-	auth.Use(middleware.AuthHandler())
+
+	//
+	userRepo := data.NewUserRepo(s.DB, s.Redis)
+
+	auth.Use(middleware.AuthHandler(userRepo.GetToken))
 
 	NewUserApi(services.NewUserService(data.NewUserRepo(s.DB, s.Redis))).SetupPublicRoutes(public).SetupAuthRoutes(auth)
 }

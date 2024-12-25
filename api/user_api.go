@@ -1,9 +1,11 @@
 package api
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"northal.com/internal/biz"
 	"northal.com/internal/pkg/response"
 	"northal.com/internal/services"
 )
@@ -34,6 +36,7 @@ func (u *UserApi) SetupAuthRoutes(r *gin.RouterGroup) *UserApi {
 	prefix := r.Group(ApiPrefix)
 	{
 		prefix.GET("/info", u.GetUserInfo)
+		prefix.GET("/list", u.GetUserList)
 	}
 
 	return u
@@ -108,4 +111,31 @@ func (u *UserApi) GetUserInfo(c *gin.Context) {
 	}
 
 	response.Success(c, user)
+}
+
+// @Summary 分页获取用户列表
+// @Description 分页获取用户列表
+// @Tags 用户模块
+// @Accept json
+// @Produce json
+// @Param params query biz.PaginationRequest true "分页参数"
+// @Success 200 {object} response.Response{data=biz.PaginationResponse{list=[]biz.Users,total=int64}}  成功后返回值
+// @Failure 500 {object} response.Response  失败后返回值
+// @Router /user/list [get]
+func (u *UserApi) GetUserList(c *gin.Context) {
+	var params biz.PaginationRequest
+	if err := c.ShouldBindQuery(&params); err != nil {
+		response.Error(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	fmt.Println(params, "params")
+
+	users, err := u.service.GetUserList(params)
+	if err != nil {
+		response.Error(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	response.Success(c, users)
 }

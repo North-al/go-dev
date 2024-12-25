@@ -33,6 +33,20 @@ func NewUserService(repo *data.UserRepo) *UserService {
 	return &UserService{repo: repo}
 }
 
+func getEmailIfValid(account string) string {
+	if verify.IsEmail(account) {
+		return account
+	}
+	return ""
+}
+
+func getPhoneIfValid(account string) string {
+	if verify.IsPhone(account) {
+		return account
+	}
+	return ""
+}
+
 func (u *UserService) Login(params LoginParams) (*LoginResponse, error) {
 	// 1. 查询用户是否存在
 	user, _, err := u.repo.GetUserByAccount(params.Account)
@@ -104,16 +118,15 @@ func (u *UserService) GetUserInfo(id int) (*biz.Users, error) {
 	return u.repo.GetUserByID(id)
 }
 
-func getEmailIfValid(account string) string {
-	if verify.IsEmail(account) {
-		return account
+// 分页获取用户列表
+func (u *UserService) GetUserList(params biz.PaginationRequest) (*biz.PaginationResponse, error) {
+	users, total, err := u.repo.GetUserList(params)
+	if err != nil {
+		return nil, err
 	}
-	return ""
-}
 
-func getPhoneIfValid(account string) string {
-	if verify.IsPhone(account) {
-		return account
-	}
-	return ""
+	return &biz.PaginationResponse{
+		Total: total,
+		List:  users,
+	}, nil
 }

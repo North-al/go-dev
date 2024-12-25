@@ -1,5 +1,16 @@
 components:
   schemas:
+    biz.PaginationResponse:
+      allOf:
+      - $ref: '#/components/schemas/total'
+      - $ref: '#/components/schemas/list'
+      properties:
+        list:
+          description: 列表
+        total:
+          description: 总数
+          type: integer
+      type: object
     biz.Permission:
       properties:
         code:
@@ -67,7 +78,23 @@ components:
     data:
       properties:
         data:
-          $ref: '#/components/schemas/biz.Users'
+          allOf:
+          - $ref: '#/components/schemas/total'
+          - $ref: '#/components/schemas/list'
+          properties:
+            list:
+              description: 列表
+            total:
+              description: 总数
+              type: integer
+          type: object
+      type: object
+    list:
+      properties:
+        list:
+          items:
+            $ref: '#/components/schemas/biz.Users'
+          type: array
       type: object
     response.Response:
       allOf:
@@ -112,6 +139,11 @@ components:
       required:
       - account
       - password
+      type: object
+    total:
+      properties:
+        total:
+          type: integer
       type: object
   securitySchemes:
     ApiKeyAuth:
@@ -169,6 +201,63 @@ paths:
       security:
       - ApiKeyAuth: []
       summary: 获取用户信息
+      tags:
+      - 用户模块
+  /user/list:
+    get:
+      description: 分页获取用户列表
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        schema:
+          default: 1
+          description: 页码
+          form: page
+          type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        required: true
+        schema:
+          default: 10
+          description: 每页数量
+          form: pageSize
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/data'
+                description: 接口统一返回格式
+                properties:
+                  code:
+                    description: 状态码 (200-成功, 500-失败)
+                    example: 200
+                    type: integer
+                  data:
+                    description: 数据内容
+                  message:
+                    description: 提示信息
+                    example: success
+                    type: string
+                type: object
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response.Response'
+          description: Internal Server Error
+      summary: 分页获取用户列表
       tags:
       - 用户模块
   /user/login:

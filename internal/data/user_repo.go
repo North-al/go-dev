@@ -77,3 +77,26 @@ func (r *UserRepo) SetToken(userID int, token string) error {
 	expireTime := time.Duration(config.GetJwtConfig().TokenExpire) * time.Hour
 	return r.redis.Set(ctxBackground, fmt.Sprintf("user:%d:token", userID), token, expireTime).Err()
 }
+
+// redis 获取token
+func (r *UserRepo) GetToken(userID int) (string, error) {
+	ctxBackground := context.Background()
+	return r.redis.Get(ctxBackground, fmt.Sprintf("user:%d:token", userID)).Result()
+}
+
+// 分页获取用户列表
+func (r *UserRepo) GetUserList(params biz.PaginationRequest) ([]biz.Users, int64, error) {
+	var users []biz.Users
+	var count int64 = 0
+
+	if err := r.db.Model(&biz.Users{}).
+		Count(&count).
+		Offset((params.Page - 1) * params.PageSize).
+		Limit(params.PageSize).
+		Order("id desc").
+		Find(&users).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return users, count, nil
+}
