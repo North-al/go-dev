@@ -28,8 +28,14 @@ func AuthHandler(getToken func(userID int) (string, error)) gin.HandlerFunc {
 		}
 
 		userToken, err := getToken(userId)
-		if err != nil || userToken != token {
+		if err != nil {
 			response.Error(c, http.StatusUnauthorized, err.Error())
+			c.Abort()
+			return
+		}
+
+		if userToken != token {
+			response.Error(c, http.StatusUnauthorized, "Unauthorized")
 			c.Abort()
 			return
 		}
