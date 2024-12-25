@@ -22,7 +22,8 @@ func InitDocs(router *gin.Engine) {
 			CustomOptions: scalar.CustomOptions{
 				PageTitle: "North GO API DOCS",
 			},
-			MetaData:       "{{ meta_token }}",
+			MetaData: "{{ meta_token }}",
+
 			Authentication: defaultToken,
 			DarkMode:       true,
 		})

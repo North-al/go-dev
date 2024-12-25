@@ -23,12 +23,15 @@ import (
 //	@contact.name	North
 //	@contact.email	1227379879@qq.com
 
-//	@host		localhost:3333
 //	@BasePath	/api
 
-// @securityDefinitions.apikey ApiKeyAuth  API的认证方式
-// @in header 发送认证的方式
-// @name Authorization  后端获取认证值得方式
+// @securityDefinitions.apikey ApiKeyAuth
+// @type            apiKey
+// @in              header
+// @name            Authorization
+
+// @description     通过在请求头中添加 `Authorization` 字段进行认证
+// @security        ApiKeyAuth
 func main() {
 	config.InitViper()
 	router := server.InitHttp()

@@ -95,7 +95,7 @@ func (u *UserApi) Register(c *gin.Context) {
 // @Tags 用户模块
 // @Accept json
 // @Produce json
-// @Security ApiKeyAuth
+// @security ApiKeyAuth
 // @Success 200 {object} response.Response{data=biz.Users}  成功后返回值
 // @Failure 500 {object} response.Response  失败后返回值
 // @Router /user/info [get]
