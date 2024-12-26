@@ -10,19 +10,16 @@ import (
 )
 
 type UserApi struct {
-	service *services.UserService
+	service   *services.UserService
+	apiPrefix string
 }
 
-const (
-	ApiPrefix = "/user"
-)
-
 func NewUserApi(service *services.UserService) *UserApi {
-	return &UserApi{service: service}
+	return &UserApi{service: service, apiPrefix: "/user"}
 }
 
 func (u *UserApi) SetupPublicRoutes(r *gin.RouterGroup) *UserApi {
-	prefix := r.Group(ApiPrefix)
+	prefix := r.Group(u.apiPrefix)
 	{
 		prefix.POST("/login", u.Login)
 		prefix.POST("/register", u.Register)
@@ -32,7 +29,7 @@ func (u *UserApi) SetupPublicRoutes(r *gin.RouterGroup) *UserApi {
 }
 
 func (u *UserApi) SetupAuthRoutes(r *gin.RouterGroup) *UserApi {
-	prefix := r.Group(ApiPrefix)
+	prefix := r.Group(u.apiPrefix)
 	{
 		prefix.GET("/info", u.GetUserInfo)
 		prefix.GET("/list", u.GetUserList)
@@ -134,5 +131,5 @@ func (u *UserApi) GetUserList(c *gin.Context) {
 		return
 	}
 
-	response.Success(c, users)
+	response.SuccessWithMessage(c, users, "获取用户列表成功")
 }

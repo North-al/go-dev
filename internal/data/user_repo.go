@@ -73,7 +73,6 @@ func (r *UserRepo) Create(user *biz.Users) error {
 // redis缓存token
 func (r *UserRepo) SetToken(userID int, token string) error {
 	ctxBackground := context.Background()
-	fmt.Println(config.GetJwtConfig().TokenExpire, "setToken config.GetJwtConfig().TokenExpire")
 	expireTime := time.Duration(config.GetJwtConfig().TokenExpire) * time.Hour
 	return r.redis.Set(ctxBackground, fmt.Sprintf("user:%d:token", userID), token, expireTime).Err()
 }

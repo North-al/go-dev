@@ -32,4 +32,6 @@ func (s *SetupApi) SetupRoutes() {
 	auth.Use(middleware.AuthHandler(userRepo.GetToken))
 
 	NewUserApi(services.NewUserService(data.NewUserRepo(s.DB, s.Redis))).SetupPublicRoutes(public).SetupAuthRoutes(auth)
+
+	NewRoleApi(services.NewRoleService(data.NewRoleRepo(s.DB))).SetupPublicRoutes(public).SetupAuthRoutes(auth)
 }

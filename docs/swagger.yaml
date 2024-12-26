@@ -2,8 +2,8 @@ components:
   schemas:
     biz.PaginationResponse:
       allOf:
-      - $ref: '#/components/schemas/total'
       - $ref: '#/components/schemas/list'
+      - $ref: '#/components/schemas/total'
       properties:
         list:
           description: 列表
@@ -79,8 +79,8 @@ components:
       properties:
         data:
           allOf:
-          - $ref: '#/components/schemas/total'
           - $ref: '#/components/schemas/list'
+          - $ref: '#/components/schemas/total'
           properties:
             list:
               description: 列表
@@ -163,6 +163,46 @@ info:
   version: "1.0"
 openapi: 3.1.0
 paths:
+  /role/create:
+    post:
+      description: 创建角色
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/biz.Role'
+        description: 角色信息
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/data'
+                description: 接口统一返回格式
+                properties:
+                  code:
+                    description: 状态码 (200-成功, 500-失败)
+                    example: 200
+                    type: integer
+                  data:
+                    description: 数据内容
+                  message:
+                    description: 提示信息
+                    example: success
+                    type: string
+                type: object
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response.Response'
+          description: Internal Server Error
+      summary: 创建角色
+      tags:
+      - 角色模块
   /user/info:
     get:
       description: 获取用户信息

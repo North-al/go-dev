@@ -23,11 +23,11 @@ func Success(ctx *gin.Context, data interface{}) {
 	})
 }
 
-func SuccessWithMessage(ctx *gin.Context, message string) {
+func SuccessWithMessage(ctx *gin.Context, data interface{}, message string) {
 	ctx.JSON(http.StatusOK, Response{
 		Code:    http.StatusOK,
 		Message: message,
-		Data:    nil,
+		Data:    data,
 	})
 }
 
