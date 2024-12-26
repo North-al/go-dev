@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -128,8 +127,6 @@ func (u *UserApi) GetUserList(c *gin.Context) {
 		response.Error(c, http.StatusBadRequest, err.Error())
 		return
 	}
-
-	fmt.Println(params, "params")
 
 	users, err := u.service.GetUserList(params)
 	if err != nil {
