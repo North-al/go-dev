@@ -9,7 +9,7 @@ services:
       context: .
       dockerfile: Dockerfile
     
-    container_name: go-dev-container
+    container_name: go-permission-container
     env_file:
         # Ensure that the variables in .env match the same variables in devcontainer.json
         - .env
@@ -35,6 +35,7 @@ services:
   db:
     image: mysql:8.0
     restart: unless-stopped
+    container_name: go_mysql
     volumes:
       - mysql_data:/var/lib/mysql
     command:
