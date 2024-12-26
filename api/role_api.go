@@ -22,6 +22,7 @@ func (u *RoleApi) SetupPublicRoutes(r *gin.RouterGroup) *RoleApi {
 	prefix := r.Group(u.apiPrefix)
 	{
 		prefix.POST("/create", u.CreateRole)
+		prefix.GET("/list", u.GetRoleList)
 	}
 
 	return u
@@ -60,4 +61,30 @@ func (r *RoleApi) CreateRole(c *gin.Context) {
 	}
 
 	response.SuccessWithMessage(c, id, "创建角色成功")
+}
+
+// @Summary 获取角色列表
+// @Description 获取角色列表
+// @Tags 角色模块
+// @Accept json
+// @Produce json
+// @Param page query int true "页码"
+// @Param pageSize query int true "每页数量"
+// @Success 200 {object} response.Response{data=biz.PaginationResponse}  成功后返回值
+// @Failure 500 {object} response.Response  失败后返回值
+// @Router /role/list [get]
+func (r *RoleApi) GetRoleList(c *gin.Context) {
+	var req biz.PaginationRequest
+	if err := c.ShouldBindQuery(&req); err != nil {
+		response.Error(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	roles, err := r.service.GetRoleList(req)
+	if err != nil {
+		response.Error(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	response.Success(c, roles)
 }

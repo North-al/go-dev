@@ -146,7 +146,8 @@ components:
           type: integer
       type: object
   securitySchemes:
-    ApiKeyAuth:
+    "":
+      description: 通过在请求头中添加 Authorization 字段进行认证
       in: header
       name: Authorization
       type: apiKey
@@ -157,7 +158,7 @@ info:
   contact:
     email: 1227379879@qq.com
     name: North
-  description: 通过在请求头中添加 `Authorization` 字段进行认证
+  description: 权限管理系统api、测试
   termsOfService: http://swagger.io/terms/
   title: 权限管理系统
   version: "1.0"
@@ -201,6 +202,57 @@ paths:
                 $ref: '#/components/schemas/response.Response'
           description: Internal Server Error
       summary: 创建角色
+      tags:
+      - 角色模块
+  /role/list:
+    get:
+      description: 获取角色列表
+      parameters:
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        schema:
+          type: integer
+      - description: 每页数量
+        in: query
+        name: pageSize
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/data'
+                description: 接口统一返回格式
+                properties:
+                  code:
+                    description: 状态码 (200-成功, 500-失败)
+                    example: 200
+                    type: integer
+                  data:
+                    description: 数据内容
+                  message:
+                    description: 提示信息
+                    example: success
+                    type: string
+                type: object
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response.Response'
+          description: Internal Server Error
+      summary: 获取角色列表
       tags:
       - 角色模块
   /user/info:
@@ -381,4 +433,4 @@ paths:
       tags:
       - 用户模块
 servers:
-- url: /api
+- url: localhost:8080/api

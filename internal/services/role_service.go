@@ -36,3 +36,15 @@ func (r *RoleService) CreateRole(role *biz.Role) (int64, error) {
 	// 2. 不存在则新建角色
 	return int64(_role.ID), r.repo.CreateRole(&_role)
 }
+
+func (r *RoleService) GetRoleList(params biz.PaginationRequest) (*biz.PaginationResponse, error) {
+	roles, total, err := r.repo.GetRoleList(params)
+	if err != nil {
+		return nil, err
+	}
+
+	return &biz.PaginationResponse{
+		Total: total,
+		List:  roles,
+	}, nil
+}

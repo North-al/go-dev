@@ -57,3 +57,18 @@ func (r *RoleRepo) GetRoleByID(id int) (*biz.Role, int64, error) {
 func (r *RoleRepo) GetRoleByName(name string) (*biz.Role, int64, error) {
 	return r.GetRoleByCondition("name = ?", name)
 }
+
+// 分页获取角色列表
+func (r *RoleRepo) GetRoleList(params biz.PaginationRequest) ([]biz.Role, int64, error) {
+	var roles []biz.Role
+	var count int64 = 0
+
+	if err := r.db.Model(&biz.Role{}).
+		Count(&count).
+		Offset((params.Page - 1) * params.PageSize).
+		Find(&roles).Error; err != nil {
+		return nil, 0, err
+	}
+
+	return roles, count, nil
+}

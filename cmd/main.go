@@ -17,21 +17,20 @@ import (
 
 //	@title			权限管理系统
 //	@version		1.0
-//	@description	权限管理系统api
+//	@description	权限管理系统api、测试
 //	@termsOfService	http://swagger.io/terms/
 
 //	@contact.name	North
 //	@contact.email	1227379879@qq.com
 
-//	@BasePath	/api
+// @host      localhost:8080
+// @BasePath  /api
 
-// @securityDefinitions.apikey ApiKeyAuth
-// @type            apiKey
-// @in              header
-// @name            Authorization
+//	@securityDefinitions.apikey	ApiKeyAuth
+//	@in							header
+//	@name						Authorization
+//	@description				通过在请求头中添加 Authorization 字段进行认证
 
-// @description     通过在请求头中添加 `Authorization` 字段进行认证
-// @security        ApiKeyAuth
 func main() {
 	config.InitViper()
 	router := server.InitHttp()

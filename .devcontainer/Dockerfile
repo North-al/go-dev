@@ -3,6 +3,7 @@ FROM mcr.microsoft.com/devcontainers/go:1-1.23-bookworm
 ENV GOPROXY=https://goproxy.cn,direct
 
 RUN go install github.com/air-verse/air@latest
+RUN go install github.com/swaggo/swag/v2/cmd/swag@latest
 
 CMD ['air', '-c', '.air.toml']
 
