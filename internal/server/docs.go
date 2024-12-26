@@ -14,18 +14,13 @@ func InitDocs(router *gin.Engine) {
 
 	router.GET("/docs", func(c *gin.Context) {
 
-		defaultToken := "your-default-token-here"
-
 		htmlContent, err := scalar.ApiReferenceHTML(&scalar.Options{
 			SpecURL: "./docs/swagger.json",
 			Theme:   scalar.ThemeId([]string{string(scalar.ThemeBluePlanet), string(scalar.ThemeDeepSpace)}[rand.Intn(2)]), // 随机选择主题
 			CustomOptions: scalar.CustomOptions{
 				PageTitle: "North GO API DOCS",
 			},
-			MetaData: "{{ meta_token }}",
-
-			Authentication: defaultToken,
-			DarkMode:       true,
+			DarkMode: true,
 		})
 
 		if err != nil {
