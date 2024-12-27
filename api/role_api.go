@@ -2,6 +2,7 @@ package api
 
 import (
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"northal.com/internal/biz"
@@ -61,6 +62,31 @@ func (r *RoleApi) CreateRole(c *gin.Context) {
 	}
 
 	response.SuccessWithMessage(c, id, "创建角色成功")
+}
+
+// @Summary 删除角色
+// @Description 删除角色
+// @Tags 角色模块
+// @Accept json
+// @Produce json
+// @Param id path int true "角色ID"
+// @Success 200 {object} response.Response  成功后返回值
+// @Failure 500 {object} response.Response  失败后返回值
+// @Router /role/delete/{id} [delete]
+func (r *RoleApi) DeleteRole(c *gin.Context) {
+	id, err := strconv.Atoi(c.Param("id"))
+	if err != nil {
+		response.Error(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	err = r.service.DeleteRole(id)
+	if err != nil {
+		response.Error(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	response.Success(c, "删除角色成功")
 }
 
 // @Summary 获取角色列表

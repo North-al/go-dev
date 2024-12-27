@@ -37,6 +37,16 @@ func (r *RoleService) CreateRole(role *biz.Role) (int64, error) {
 	return int64(_role.ID), r.repo.CreateRole(&_role)
 }
 
+func (r *RoleService) DeleteRole(id int) error {
+
+	// 1. 判断id是否存在
+	if id == 0 {
+		return errors.New("id is required")
+	}
+
+	return r.repo.DeleteRole(id)
+}
+
 func (r *RoleService) GetRoleList(params biz.PaginationRequest) (*biz.PaginationResponse, error) {
 	roles, total, err := r.repo.GetRoleList(params)
 	if err != nil {

@@ -72,3 +72,8 @@ func (r *RoleRepo) GetRoleList(params biz.PaginationRequest) ([]biz.Role, int64,
 
 	return roles, count, nil
 }
+
+// 删除角色
+func (r *RoleRepo) DeleteRole(id int) error {
+	return r.db.Delete(&biz.Role{}, id).Error
+}

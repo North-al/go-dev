@@ -1,7 +1,7 @@
-# gin-permission
+# gin-admin
 
 ## 项目介绍
-> 采用go + gin框架，实现权限管理功能
+> 采用go + gin框架，实现后台管理功能
 
 ## 项目文档
 1. 生成swagger.json文件
