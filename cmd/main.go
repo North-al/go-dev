@@ -23,7 +23,6 @@ import (
 //	@contact.name	North
 //	@contact.email	1227379879@qq.com
 
-// @host      localhost:8080
 // @BasePath  /api
 
 //	@securityDefinitions.apikey	ApiKeyAuth

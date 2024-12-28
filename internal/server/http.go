@@ -7,6 +7,7 @@ import (
 
 func InitHttp() *gin.Engine {
 	engine := gin.Default()
+	engine.Use(middleware.Cors())
 	engine.Use(middleware.ErrorHandler())
 	return engine
 }

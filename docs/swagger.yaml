@@ -204,6 +204,37 @@ paths:
       summary: 创建角色
       tags:
       - 角色模块
+  /role/delete/{id}:
+    delete:
+      description: 删除角色
+      parameters:
+      - description: 角色ID
+        in: path
+        name: id
+        required: true
+        schema:
+          type: integer
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response.Response'
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response.Response'
+          description: Internal Server Error
+      summary: 删除角色
+      tags:
+      - 角色模块
   /role/list:
     get:
       description: 获取角色列表
@@ -433,4 +464,4 @@ paths:
       tags:
       - 用户模块
 servers:
-- url: localhost:8080/api
+- url: /api

@@ -13,14 +13,14 @@ func ErrorHandler() gin.HandlerFunc {
 		defer func() {
 			if err := recover(); err != nil {
 				// 捕获 panic 错误
-				response.Error(ctx, http.StatusInternalServerError, err.(string))
+				response.SuccessWithCodeAndMessage(ctx, http.StatusInternalServerError, nil, err.(string))
 			}
 		}()
 		ctx.Next()
 
 		// 检查是否有错误
 		if len(ctx.Errors) > 0 {
-			response.Error(ctx, http.StatusInternalServerError, ctx.Errors.Last().Error())
+			response.SuccessWithCodeAndMessage(ctx, http.StatusInternalServerError, nil, ctx.Errors.Last().Error())
 		}
 	}
 }
