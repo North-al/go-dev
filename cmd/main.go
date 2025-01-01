@@ -23,8 +23,6 @@ import (
 //	@contact.name	North
 //	@contact.email	1227379879@qq.com
 
-// @BasePath  /api
-
 //	@securityDefinitions.apikey	ApiKeyAuth
 //	@in							header
 //	@name						Authorization
@@ -36,7 +34,7 @@ func main() {
 	db := server.InitDatabase()
 	redis := server.InitRedis()
 
-	db.AutoMigrate(&biz.Users{}, &biz.Role{}, &biz.Permission{})
+	db.AutoMigrate(&biz.User{}, &biz.Role{}, &biz.Menu{}, &biz.UserRole{})
 
 	// 加载所有api
 	api.NewSetupApi(router, db, redis).SetupRoutes()

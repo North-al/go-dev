@@ -4,9 +4,16 @@ import (
 	"gorm.io/gorm"
 )
 
+// UserRole 用户角色关联表
+// @Description 用户角色关联表
+type UserRole struct {
+	UserID uint64 `gorm:"autoIncrement:false"`
+	RoleID uint64 `gorm:"autoIncrement:false"`
+}
+
 // Users 用户模型
 // @Description 系统用户信息
-type Users struct {
+type User struct {
 	ID        uint64         `gorm:"primaryKey;autoIncrement" json:"id"`               // 用户id
 	Username  string         `gorm:"type:varchar(50);not null;unique" json:"username"` // 用户名 唯一
 	Password  string         `gorm:"size:255;not null" json:"-"`                       // 密码
@@ -19,12 +26,12 @@ type Users struct {
 	DeletedAt gorm.DeletedAt `json:"-" gorm:"index;autoDeleteTime" `                   // 删除时间
 }
 
-func (*Users) TableName() string {
+func (*User) TableName() string {
 	return "t_users"
 }
 
 // AfterFind 钩子函数
-func (u *Users) AfterFind(tx *gorm.DB) (err error) {
+func (u *User) AfterFind(tx *gorm.DB) (err error) {
 	if u.Roles == nil {
 		u.Roles = []*Role{}
 	}

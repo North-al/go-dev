@@ -95,7 +95,7 @@ func (u *UserApi) Register(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @security ApiKeyAuth
-// @Success 200 {object} response.Response{data=biz.Users}  成功后返回值
+// @Success 200 {object} response.Response{data=biz.User}  成功后返回值
 // @Failure 500 {object} response.Response  失败后返回值
 // @Router /user/info [get]
 func (u *UserApi) GetUserInfo(c *gin.Context) {
@@ -115,7 +115,7 @@ func (u *UserApi) GetUserInfo(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param params query biz.PaginationRequest true "分页参数"
-// @Success 200 {object} response.Response{data=biz.PaginationResponse{list=[]biz.Users,total=int64}}  成功后返回值
+// @Success 200 {object} response.Response{data=biz.PaginationResponse{list=[]biz.User,total=int64}}  成功后返回值
 // @Failure 500 {object} response.Response  失败后返回值
 // @Router /user/list [get]
 func (u *UserApi) GetUserList(c *gin.Context) {

@@ -21,11 +21,11 @@ func NewUserRepo(db *gorm.DB, redis *redis.Client) *UserRepo {
 	return &UserRepo{db: db, redis: redis}
 }
 
-func (r *UserRepo) GetUserByCondition(condition string, args ...interface{}) (*biz.Users, int64, error) {
-	var user biz.Users
+func (r *UserRepo) GetUserByCondition(condition string, args ...interface{}) (*biz.User, int64, error) {
+	var user biz.User
 	var count int64 = 0
 
-	if err := r.db.Model(&biz.Users{}).Where(condition, args...).First(&user).Count(&count).Error; err != nil {
+	if err := r.db.Model(&biz.User{}).Where(condition, args...).First(&user).Count(&count).Error; err != nil {
 		return nil, 0, err
 	}
 
@@ -33,7 +33,7 @@ func (r *UserRepo) GetUserByCondition(condition string, args ...interface{}) (*b
 }
 
 // 根据id查询用户
-func (r *UserRepo) GetUserByID(id int) (*biz.Users, error) {
+func (r *UserRepo) GetUserByID(id int) (*biz.User, error) {
 
 	if id == 0 {
 		return nil, errors.New("id is required")
@@ -44,7 +44,7 @@ func (r *UserRepo) GetUserByID(id int) (*biz.Users, error) {
 }
 
 // 根据账号查询用户
-func (r *UserRepo) GetUserByAccount(account string) (*biz.Users, int64, error) {
+func (r *UserRepo) GetUserByAccount(account string) (*biz.User, int64, error) {
 	if account == "" {
 		return nil, 0, errors.New("账号是必填项")
 	}
@@ -53,7 +53,7 @@ func (r *UserRepo) GetUserByAccount(account string) (*biz.Users, int64, error) {
 }
 
 // 根据用户名查询用户
-func (r *UserRepo) GetUserByUsername(username string) (*biz.Users, error) {
+func (r *UserRepo) GetUserByUsername(username string) (*biz.User, error) {
 	if username == "" {
 		return nil, errors.New("username is required")
 	}
@@ -62,7 +62,7 @@ func (r *UserRepo) GetUserByUsername(username string) (*biz.Users, error) {
 	return user, err
 }
 
-func (r *UserRepo) Create(user *biz.Users) error {
+func (r *UserRepo) Create(user *biz.User) error {
 	if user == nil {
 		return errors.New("user is required")
 	}
@@ -84,11 +84,11 @@ func (r *UserRepo) GetToken(userID int) (string, error) {
 }
 
 // 分页获取用户列表
-func (r *UserRepo) GetUserList(params biz.PaginationRequest) ([]biz.Users, int64, error) {
-	var users []biz.Users
+func (r *UserRepo) GetUserList(params biz.PaginationRequest) ([]biz.User, int64, error) {
+	var users []biz.User
 	var count int64 = 0
 
-	if err := r.db.Model(&biz.Users{}).
+	if err := r.db.Model(&biz.User{}).
 		Count(&count).
 		Offset((params.Page - 1) * params.PageSize).
 		Limit(params.PageSize).

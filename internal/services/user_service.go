@@ -85,7 +85,7 @@ func (u *UserService) Register(params RegisterParams) (int64, error) {
 	}
 
 	// 2. 不存在则新建用户
-	user := biz.Users{
+	user := biz.User{
 		Username: random.GenerateRandomUsername(),
 		Password: params.Password,
 		Email:    getEmailIfValid(params.Account),
@@ -114,7 +114,7 @@ func (u *UserService) Register(params RegisterParams) (int64, error) {
 }
 
 // 获取用户信息
-func (u *UserService) GetUserInfo(id int) (*biz.Users, error) {
+func (u *UserService) GetUserInfo(id int) (*biz.User, error) {
 	return u.repo.GetUserByID(id)
 }
 

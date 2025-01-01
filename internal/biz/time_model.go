@@ -20,7 +20,8 @@ func (t LocalTime) MarshalJSON() ([]byte, error) {
 }
 
 func (t *LocalTime) UnmarshalJSON(data []byte) (err error) {
-	now, err := time.ParseInLocation(`"`+timeFormat+`"`, string(data), time.Local)
+	loc, _ := time.LoadLocation(timezone)
+	now, err := time.ParseInLocation(`"`+timeFormat+`"`, string(data), loc)
 	*t = LocalTime(now)
 	return
 }

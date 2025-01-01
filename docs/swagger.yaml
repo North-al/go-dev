@@ -1,5 +1,45 @@
 components:
   schemas:
+    biz.Menu:
+      properties:
+        created_at:
+          type: string
+        hidden:
+          description: 路由菜单是否隐藏
+          type: boolean
+        icon:
+          description: 路由菜单图标
+          type: string
+        id:
+          type: integer
+        keep_alive:
+          description: 路由菜单是否缓存
+          type: boolean
+        page_file_path:
+          description: 页面文件路径
+          type: string
+        parent_id:
+          description: '父级菜单、vue文件路径、路由路径、路由name、重定向路径 { meta: { title, icon, hidden,
+            keepAlive,  } }'
+          type: integer
+        redirect:
+          description: 重定向路径
+          type: string
+        route_name:
+          description: 路由name
+          type: string
+        route_path:
+          description: 路由路径
+          type: string
+        sort:
+          description: 路由菜单排序
+          type: integer
+        title:
+          description: 路由菜单标题
+          type: string
+        updated_at:
+          type: string
+      type: object
     biz.PaginationResponse:
       allOf:
       - $ref: '#/components/schemas/list'
@@ -11,21 +51,6 @@ components:
           description: 总数
           type: integer
       type: object
-    biz.Permission:
-      properties:
-        code:
-          type: string
-        created_at:
-          type: string
-        description:
-          type: string
-        id:
-          type: integer
-        name:
-          type: string
-        updated_at:
-          type: string
-      type: object
     biz.Role:
       properties:
         created_at:
@@ -34,17 +59,17 @@ components:
           type: string
         id:
           type: integer
-        name:
-          type: string
-        permissions:
+        menus:
           items:
-            $ref: '#/components/schemas/biz.Permission'
+            $ref: '#/components/schemas/biz.Menu'
           type: array
           uniqueItems: false
+        name:
+          type: string
         updated_at:
           type: string
       type: object
-    biz.Users:
+    biz.User:
       description: 系统用户信息
       properties:
         created_at:
@@ -93,7 +118,7 @@ components:
       properties:
         list:
           items:
-            $ref: '#/components/schemas/biz.Users'
+            $ref: '#/components/schemas/biz.User'
           type: array
       type: object
     response.Response:
@@ -463,5 +488,3 @@ paths:
       summary: 注册
       tags:
       - 用户模块
-servers:
-- url: /api
