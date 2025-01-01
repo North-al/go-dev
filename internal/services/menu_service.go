@@ -24,12 +24,14 @@ func (m *MenuService) CreateMenu(menu *biz.Menu) error {
 		return err
 	}
 
-	if _menu.RouteName == menu.RouteName {
-		return errors.New("菜单的Name不能相同")
-	}
+	if _menu != nil {
+		if _menu.RouteName == menu.RouteName {
+			return errors.New("菜单的Name不能相同")
+		}
 
-	if _menu.RoutePath == menu.RoutePath {
-		return errors.New("菜单的Path不能相同")
+		if _menu.RoutePath == menu.RoutePath {
+			return errors.New("菜单的Path不能相同")
+		}
 	}
 
 	// 2. 新建菜单
