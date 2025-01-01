@@ -34,4 +34,6 @@ func (s *SetupApi) SetupRoutes() {
 	NewUserApi(services.NewUserService(data.NewUserRepo(s.DB, s.Redis))).SetupPublicRoutes(public).SetupAuthRoutes(auth)
 
 	NewRoleApi(services.NewRoleService(data.NewRoleRepo(s.DB))).SetupPublicRoutes(public).SetupAuthRoutes(auth)
+
+	NewMenuApi(services.NewMenuService(data.NewMenuRepo(s.DB))).SetupAuthRoutes(auth)
 }
