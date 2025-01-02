@@ -42,8 +42,8 @@ components:
       type: object
     biz.PaginationResponse:
       allOf:
-      - $ref: '#/components/schemas/total'
       - $ref: '#/components/schemas/list'
+      - $ref: '#/components/schemas/total'
       properties:
         list:
           description: 列表
@@ -104,8 +104,8 @@ components:
       properties:
         data:
           allOf:
-          - $ref: '#/components/schemas/total'
           - $ref: '#/components/schemas/list'
+          - $ref: '#/components/schemas/total'
           properties:
             list:
               description: 列表
@@ -265,6 +265,46 @@ paths:
                 $ref: '#/components/schemas/response.Response'
           description: Internal Server Error
       summary: 获取菜单列表
+      tags:
+      - 菜单模块
+  /menu/update:
+    put:
+      description: 更新菜单
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/biz.Menu'
+        description: 菜单信息
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/data'
+                description: 接口统一返回格式
+                properties:
+                  code:
+                    description: 状态码 (200-成功, 500-失败)
+                    example: 200
+                    type: integer
+                  data:
+                    description: 数据内容
+                  message:
+                    description: 提示信息
+                    example: success
+                    type: string
+                type: object
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response.Response'
+          description: Internal Server Error
+      summary: 更新菜单
       tags:
       - 菜单模块
   /role/create:
@@ -566,5 +606,3 @@ paths:
       summary: 注册
       tags:
       - 用户模块
-servers:
-- url: /api

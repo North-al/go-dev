@@ -41,3 +41,7 @@ func (m *MenuService) CreateMenu(menu *biz.Menu) error {
 func (m *MenuService) GetAllMenus() ([]biz.Menu, error) {
 	return m.repo.GetAllMenus()
 }
+
+func (m *MenuService) UpdateMenu(menu *biz.Menu) error {
+	return m.repo.UpdateMenu(menu)
+}

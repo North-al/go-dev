@@ -39,15 +39,15 @@ func (u *RoleApi) SetupAuthRoutes(r *gin.RouterGroup) *RoleApi {
 	return u
 }
 
-// @Summary 创建角色
-// @Description 创建角色
-// @Tags 角色模块
-// @Accept json
-// @Produce json
-// @Param role body biz.Role true "角色信息"
-// @Success 200 {object} response.Response{data=int64}  成功后返回值
-// @Failure 500 {object} response.Response  失败后返回值
-// @Router /role/create [post]
+//	@Summary		创建角色
+//	@Description	创建角色
+//	@Tags			角色模块
+//	@Accept			json
+//	@Produce		json
+//	@Param			role	body		biz.Role						true	"角色信息"
+//	@Success		200		{object}	response.Response{data=int64}	成功后返回值
+//	@Failure		500		{object}	response.Response				失败后返回值
+//	@Router			/role/create [post]
 func (r *RoleApi) CreateRole(c *gin.Context) {
 	var req biz.Role
 	if err := c.ShouldBindJSON(&req); err != nil {
@@ -64,15 +64,15 @@ func (r *RoleApi) CreateRole(c *gin.Context) {
 	response.SuccessWithMessage(c, id, "创建角色成功")
 }
 
-// @Summary 删除角色
-// @Description 删除角色
-// @Tags 角色模块
-// @Accept json
-// @Produce json
-// @Param id path int true "角色ID"
-// @Success 200 {object} response.Response  成功后返回值
-// @Failure 500 {object} response.Response  失败后返回值
-// @Router /role/delete/{id} [delete]
+//	@Summary		删除角色
+//	@Description	删除角色
+//	@Tags			角色模块
+//	@Accept			json
+//	@Produce		json
+//	@Param			id	path		int					true	"角色ID"
+//	@Success		200	{object}	response.Response	成功后返回值
+//	@Failure		500	{object}	response.Response	失败后返回值
+//	@Router			/role/delete/{id} [delete]
 func (r *RoleApi) DeleteRole(c *gin.Context) {
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
@@ -89,16 +89,16 @@ func (r *RoleApi) DeleteRole(c *gin.Context) {
 	response.Success(c, "删除角色成功")
 }
 
-// @Summary 获取角色列表
-// @Description 获取角色列表
-// @Tags 角色模块
-// @Accept json
-// @Produce json
-// @Param page query int true "页码"
-// @Param pageSize query int true "每页数量"
-// @Success 200 {object} response.Response{data=biz.PaginationResponse}  成功后返回值
-// @Failure 500 {object} response.Response  失败后返回值
-// @Router /role/list [get]
+//	@Summary		获取角色列表
+//	@Description	获取角色列表
+//	@Tags			角色模块
+//	@Accept			json
+//	@Produce		json
+//	@Param			page		query		int												true	"页码"
+//	@Param			pageSize	query		int												true	"每页数量"
+//	@Success		200			{object}	response.Response{data=biz.PaginationResponse}	成功后返回值
+//	@Failure		500			{object}	response.Response								失败后返回值
+//	@Router			/role/list [get]
 func (r *RoleApi) GetRoleList(c *gin.Context) {
 	var req biz.PaginationRequest
 	if err := c.ShouldBindQuery(&req); err != nil {

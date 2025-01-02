@@ -38,15 +38,15 @@ func (u *UserApi) SetupAuthRoutes(r *gin.RouterGroup) *UserApi {
 	return u
 }
 
-// @Summary 用户登录
-// @Description 用户登录，返回token
-// @Tags 用户模块
-// @Accept json
-// @Produce json
-// @Param user body services.LoginParams true "用户信息"
-// @Success 200 {object} response.Response{data=string}  成功后返回值
-// @Failure 500 {object} response.Response  失败后返回值
-// @Router /user/login [post]
+//	@Summary		用户登录
+//	@Description	用户登录，返回token
+//	@Tags			用户模块
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body		services.LoginParams			true	"用户信息"
+//	@Success		200		{object}	response.Response{data=string}	成功后返回值
+//	@Failure		500		{object}	response.Response				失败后返回值
+//	@Router			/user/login [post]
 func (u *UserApi) Login(c *gin.Context) {
 	var params services.LoginParams
 	if err := c.ShouldBindJSON(&params); err != nil {
@@ -63,15 +63,15 @@ func (u *UserApi) Login(c *gin.Context) {
 	response.Success(c, success)
 }
 
-// @Summary 注册
-// @Description 注册
-// @Tags 用户模块
-// @Accept json
-// @Produce json
-// @Param user body services.RegisterParams true "用户信息"
-// @Success 200 {object} response.Response{data=int}  成功后返回值
-// @Failure 500 {object} response.Response  失败后返回值
-// @Router /user/register [post]
+//	@Summary		注册
+//	@Description	注册
+//	@Tags			用户模块
+//	@Accept			json
+//	@Produce		json
+//	@Param			user	body		services.RegisterParams		true	"用户信息"
+//	@Success		200		{object}	response.Response{data=int}	成功后返回值
+//	@Failure		500		{object}	response.Response			失败后返回值
+//	@Router			/user/register [post]
 func (u *UserApi) Register(c *gin.Context) {
 	var body services.RegisterParams
 
@@ -89,15 +89,15 @@ func (u *UserApi) Register(c *gin.Context) {
 	response.Success(c, result)
 }
 
-// @Summary 获取用户信息
-// @Description 获取用户信息
-// @Tags 用户模块
-// @Accept json
-// @Produce json
-// @security ApiKeyAuth
-// @Success 200 {object} response.Response{data=biz.User}  成功后返回值
-// @Failure 500 {object} response.Response  失败后返回值
-// @Router /user/info [get]
+//	@Summary		获取用户信息
+//	@Description	获取用户信息
+//	@Tags			用户模块
+//	@Accept			json
+//	@Produce		json
+//	@security		ApiKeyAuth
+//	@Success		200	{object}	response.Response{data=biz.User}	成功后返回值
+//	@Failure		500	{object}	response.Response					失败后返回值
+//	@Router			/user/info [get]
 func (u *UserApi) GetUserInfo(c *gin.Context) {
 	userID := c.GetInt("user_id")
 	user, err := u.service.GetUserInfo(userID)
@@ -109,15 +109,15 @@ func (u *UserApi) GetUserInfo(c *gin.Context) {
 	response.Success(c, user)
 }
 
-// @Summary 分页获取用户列表
-// @Description 分页获取用户列表
-// @Tags 用户模块
-// @Accept json
-// @Produce json
-// @Param params query biz.PaginationRequest true "分页参数"
-// @Success 200 {object} response.Response{data=biz.PaginationResponse{list=[]biz.User,total=int64}}  成功后返回值
-// @Failure 500 {object} response.Response  失败后返回值
-// @Router /user/list [get]
+//	@Summary		分页获取用户列表
+//	@Description	分页获取用户列表
+//	@Tags			用户模块
+//	@Accept			json
+//	@Produce		json
+//	@Param			params	query		biz.PaginationRequest														true	"分页参数"
+//	@Success		200		{object}	response.Response{data=biz.PaginationResponse{list=[]biz.User,total=int64}}	成功后返回值
+//	@Failure		500		{object}	response.Response															失败后返回值
+//	@Router			/user/list [get]
 func (u *UserApi) GetUserList(c *gin.Context) {
 	var params biz.PaginationRequest
 	if err := c.ShouldBindQuery(&params); err != nil {

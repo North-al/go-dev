@@ -57,3 +57,21 @@ func (m *MenuRepo) GetAllMenus() ([]biz.Menu, error) {
 	var menus []biz.Menu
 	return menus, m.db.Find(&menus).Error
 }
+
+// 更新菜单
+func (m *MenuRepo) UpdateMenu(menu *biz.Menu) error {
+	if menu == nil {
+		return errors.New("menu is required")
+	}
+
+	if reflect.DeepEqual(menu, biz.Menu{}) {
+		return errors.New("menu is empty")
+	}
+
+	return m.db.Model(&biz.Menu{}).Where("id = ?", menu.ID).Updates(menu).Error
+}
+
+// 删除菜单
+func (m *MenuRepo) DeleteMenu(id uint) error {
+	return m.db.Delete(&biz.Menu{}, id).Error
+}
