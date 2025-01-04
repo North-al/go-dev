@@ -50,3 +50,8 @@ func (m *MenuService) UpdateMenu(menu *biz.Menu) error {
 func (m *MenuService) SetMenuToRole(roleId uint, menuIds []uint) error {
 	return m.repo.SetMenuToRole(roleId, menuIds)
 }
+
+// 获取角色菜单
+func (m *MenuService) GetRoleMenus(roleId uint) ([]biz.Menu, error) {
+	return m.repo.GetRoleMenus(roleId)
+}

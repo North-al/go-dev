@@ -229,6 +229,46 @@ paths:
       summary: 创建菜单
       tags:
       - 菜单模块
+  /menu/get-role:
+    get:
+      description: 获取角色菜单
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: integer
+        description: 角色ID
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/data'
+                description: 接口统一返回格式
+                properties:
+                  code:
+                    description: 状态码 (200-成功, 500-失败)
+                    example: 200
+                    type: integer
+                  data:
+                    description: 数据内容
+                  message:
+                    description: 提示信息
+                    example: success
+                    type: string
+                type: object
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response.Response'
+          description: Internal Server Error
+      summary: 获取角色菜单
+      tags:
+      - 菜单模块
   /menu/list:
     get:
       description: 获取菜单列表
@@ -515,15 +555,6 @@ paths:
     get:
       description: 分页获取用户列表
       parameters:
-      - description: 页码
-        in: query
-        name: page
-        required: true
-        schema:
-          default: 1
-          description: 页码
-          form: page
-          type: integer
       - description: 每页数量
         in: query
         name: pageSize
@@ -532,6 +563,15 @@ paths:
           default: 10
           description: 每页数量
           form: pageSize
+          type: integer
+      - description: 页码
+        in: query
+        name: page
+        required: true
+        schema:
+          default: 1
+          description: 页码
+          form: page
           type: integer
       requestBody:
         content:

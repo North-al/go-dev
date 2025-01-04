@@ -25,6 +25,7 @@ func (m *MenuApi) SetupAuthRoutes(r *gin.RouterGroup) *MenuApi {
 		prefix.POST("/create", m.CreateMenu)
 		prefix.PUT("/update", m.UpdateMenu)
 		prefix.POST("/set-role", m.SetMenuToRole)
+		prefix.GET("/get-role", m.GetRoleMenus)
 	}
 
 	return m
@@ -126,4 +127,32 @@ func (m *MenuApi) SetMenuToRole(c *gin.Context) {
 	}
 
 	response.SuccessWithMessage(c, true, "设置角色菜单成功")
+}
+
+// @Summary		获取角色菜单
+// @Description	获取角色菜单
+// @Tags			菜单模块
+// @Accept			json
+// @Produce		json
+// @Param			roleId	body		uint						true	"角色ID"
+// @Success		200		{object}	response.Response{data=[]biz.Menu}	成功后返回值
+// @Failure		500		{object}	response.Response				失败后返回值
+// @Router			/menu/get-role [get]
+func (m *MenuApi) GetRoleMenus(c *gin.Context) {
+	var req struct {
+		RoleId uint `json:"roleId" binding:"required"`
+	}
+
+	if err := c.ShouldBindJSON(&req); err != nil {
+		response.Error(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	menus, err := m.service.GetRoleMenus(req.RoleId)
+	if err != nil {
+		response.Error(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+
+	response.Success(c, menus)
 }

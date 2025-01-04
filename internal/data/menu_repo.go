@@ -80,3 +80,9 @@ func (m *MenuRepo) DeleteMenu(id uint) error {
 func (m *MenuRepo) SetMenuToRole(roleId uint, menuIds []uint) error {
 	return m.db.Model(&biz.Role{}).Where("id = ?", roleId).Association("Menus").Replace(menuIds)
 }
+
+// 获取角色菜单
+func (m *MenuRepo) GetRoleMenus(roleId uint) ([]biz.Menu, error) {
+	var menus []biz.Menu
+	return menus, m.db.Model(&biz.Menu{}).Where("id IN (?)", roleId).Find(&menus).Error
+}
