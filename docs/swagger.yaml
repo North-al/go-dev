@@ -267,6 +267,48 @@ paths:
       summary: 获取菜单列表
       tags:
       - 菜单模块
+  /menu/set-role:
+    post:
+      description: 设置角色菜单
+      requestBody:
+        content:
+          application/json:
+            schema:
+              items:
+                type: integer
+              type: array
+        description: 菜单ID列表
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                allOf:
+                - $ref: '#/components/schemas/data'
+                description: 接口统一返回格式
+                properties:
+                  code:
+                    description: 状态码 (200-成功, 500-失败)
+                    example: 200
+                    type: integer
+                  data:
+                    description: 数据内容
+                  message:
+                    description: 提示信息
+                    example: success
+                    type: string
+                type: object
+          description: OK
+        "500":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/response.Response'
+          description: Internal Server Error
+      summary: 设置角色菜单
+      tags:
+      - 菜单模块
   /menu/update:
     put:
       description: 更新菜单

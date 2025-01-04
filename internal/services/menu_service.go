@@ -45,3 +45,8 @@ func (m *MenuService) GetAllMenus() ([]biz.Menu, error) {
 func (m *MenuService) UpdateMenu(menu *biz.Menu) error {
 	return m.repo.UpdateMenu(menu)
 }
+
+// 设置菜单给角色
+func (m *MenuService) SetMenuToRole(roleId uint, menuIds []uint) error {
+	return m.repo.SetMenuToRole(roleId, menuIds)
+}

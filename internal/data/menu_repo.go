@@ -75,3 +75,8 @@ func (m *MenuRepo) UpdateMenu(menu *biz.Menu) error {
 func (m *MenuRepo) DeleteMenu(id uint) error {
 	return m.db.Delete(&biz.Menu{}, id).Error
 }
+
+// 设置菜单给角色
+func (m *MenuRepo) SetMenuToRole(roleId uint, menuIds []uint) error {
+	return m.db.Model(&biz.Role{}).Where("id = ?", roleId).Association("Menus").Replace(menuIds)
+}
