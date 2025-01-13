@@ -24,6 +24,8 @@ type Menu struct {
 	KeepAlive bool `json:"keep_alive"`
 	// 路由菜单排序
 	Sort int `json:"sort"`
+	// 菜单类型 0：目录、1：菜单、2：按钮
+	MenuType int `json:"menu_type"`
 
 	CreatedAt *LocalTime     `gorm:"autoCreateTime" json:"created_at"`
 	UpdatedAt *LocalTime     `gorm:"autoUpdateTime" json:"updated_at"`
